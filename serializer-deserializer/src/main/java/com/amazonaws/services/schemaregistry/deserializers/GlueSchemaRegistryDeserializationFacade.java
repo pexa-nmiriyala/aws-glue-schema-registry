@@ -255,7 +255,7 @@ public class GlueSchemaRegistryDeserializationFacade implements Closeable {
         public Schema load(UUID schemaVersionId) {
             GetSchemaVersionResponse response =
                 schemaRegistryClient.getSchemaVersionResponse(schemaVersionId.toString());
-            return new Schema(response.schemaDefinition(), response.dataFormat().name(), getSchemaName(response.schemaArn()));
+            return new Schema(response.schemaDefinition(), response.dataFormat().name(), getSchemaName(response.schemaArn()), response.versionNumber());
         }
     }
 }

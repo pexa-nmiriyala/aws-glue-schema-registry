@@ -16,6 +16,7 @@
 package com.amazonaws.services.schemaregistry.kafkaconnect;
 
 import com.amazonaws.services.schemaregistry.common.configs.UserAgents;
+import com.amazonaws.services.schemaregistry.deserializers.GlueSchemaRegistryDeserializationFacade;
 import com.amazonaws.services.schemaregistry.deserializers.avro.AWSKafkaAvroDeserializer;
 import com.amazonaws.services.schemaregistry.exception.AWSSchemaRegistryException;
 import com.amazonaws.services.schemaregistry.kafkaconnect.avrodata.AvroData;
@@ -119,8 +120,9 @@ public class AWSKafkaAvroConverter implements Converter {
         }
 
         org.apache.avro.Schema.Parser parser = new org.apache.avro.Schema.Parser();
-        org.apache.avro.Schema avroSchema = parser.parse(deserializer.getGlueSchemaRegistryDeserializationFacade().getSchemaDefinition(value));
+        GlueSchemaRegistryDeserializationFacade glueSchemaRegistryDeserializationFacade = deserializer.getGlueSchemaRegistryDeserializationFacade();
 
-        return avroData.toConnectData(avroSchema, deserialized);
+        org.apache.avro.Schema avroSchema = parser.parse(glueSchemaRegistryDeserializationFacade.getSchemaDefinition(value));
+        return avroData.toConnectData(avroSchema, deserialized, Math.toIntExact(glueSchemaRegistryDeserializationFacade.getSchema(value).getSchemaVersion()));
     }
 }

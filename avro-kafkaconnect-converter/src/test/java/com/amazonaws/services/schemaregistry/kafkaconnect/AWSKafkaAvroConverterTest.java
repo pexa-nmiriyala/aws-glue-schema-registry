@@ -187,9 +187,12 @@ public class AWSKafkaAvroConverterTest {
                 .buffer(ByteBuffer.wrap(bytes))
                 .transportName(testTopic)
                 .build();
+        com.amazonaws.services.schemaregistry.common.Schema schema=mock(com.amazonaws.services.schemaregistry.common.Schema.class);
 
         when(glueSchemaRegistryDeserializationFacade.deserialize(awsDeserializerInput)).thenReturn(record);
         when(glueSchemaRegistryDeserializationFacade.getSchemaDefinition(bytes)).thenReturn(schemaDefinition);
+        when(glueSchemaRegistryDeserializationFacade.getSchema(bytes)).thenReturn(schema);
+        when(schema.getSchemaVersion()).thenReturn(1L);
         AWSKafkaAvroDeserializer awsKafkaAvroDeserializer = new AWSKafkaAvroDeserializer(mockCredProvider, null);
         awsKafkaAvroDeserializer.configure(configs, true);
 
@@ -208,6 +211,7 @@ public class AWSKafkaAvroConverterTest {
                 .field("name", Schema.STRING_SCHEMA)
                 .field("favorite_number", Schema.INT32_SCHEMA)
                 .field("favorite_color", Schema.STRING_SCHEMA)
+                .version(1)
                 .build();
 
         Struct structRecord = new Struct(schema)

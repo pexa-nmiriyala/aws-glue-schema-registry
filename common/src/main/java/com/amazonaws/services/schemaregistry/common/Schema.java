@@ -18,11 +18,11 @@ package com.amazonaws.services.schemaregistry.common;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
+import java.util.Objects;
+
 /**
  * Schema entity represents a schema and it's properties stored in Glue Schema Registry.
  */
-@AllArgsConstructor
-@Value
 public class Schema {
     /**
      * Schema Definition contains the string representation of schema version stored during registration.
@@ -38,4 +38,67 @@ public class Schema {
      * Schema Name represents name of the schema under which the schema version was registered.
      */
     private String schemaName;
+
+    /**
+     * Schema Version represents version of the schema under which the schema version was registered.
+     */
+    private Long schemaVersion;
+
+    public Schema(String schemaDefinition, String dataFormat, String schemaName) {
+        this.schemaDefinition = schemaDefinition;
+        this.dataFormat = dataFormat;
+        this.schemaName = schemaName;
+    }
+
+    public Schema(String schemaDefinition, String dataFormat, String schemaName, Long schemaVersion) {
+        this.schemaDefinition = schemaDefinition;
+        this.dataFormat = dataFormat;
+        this.schemaName = schemaName;
+        this.schemaVersion = schemaVersion;
+    }
+
+    public String getSchemaDefinition() {
+        return schemaDefinition;
+    }
+
+    public void setSchemaDefinition(String schemaDefinition) {
+        this.schemaDefinition = schemaDefinition;
+    }
+
+    public String getDataFormat() {
+        return dataFormat;
+    }
+
+    public void setDataFormat(String dataFormat) {
+        this.dataFormat = dataFormat;
+    }
+
+    public String getSchemaName() {
+        return schemaName;
+    }
+
+    public void setSchemaName(String schemaName) {
+        this.schemaName = schemaName;
+    }
+
+    public Long getSchemaVersion() {
+        return schemaVersion;
+    }
+
+    public void setSchemaVersion(Long schemaVersion) {
+        this.schemaVersion = schemaVersion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Schema schema = (Schema) o;
+        return Objects.equals(schemaDefinition, schema.schemaDefinition) && Objects.equals(dataFormat, schema.dataFormat) && Objects.equals(schemaName, schema.schemaName) && Objects.equals(schemaVersion, schema.schemaVersion);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(schemaDefinition, dataFormat, schemaName, schemaVersion);
+    }
 }
