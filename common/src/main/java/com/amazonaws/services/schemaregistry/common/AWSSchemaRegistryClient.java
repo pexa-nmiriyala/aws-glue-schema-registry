@@ -77,7 +77,7 @@ public class AWSSchemaRegistryClient {
     /**
      * Create Amazon Schema Registry Client.
      *
-     * @param credentialsProvider           credentials provider
+     * @param credentialsProvider             credentials provider
      * @param glueSchemaRegistryConfiguration schema registry configuration elements
      * @throws AWSSchemaRegistryException on any error while building the client
      */
@@ -102,7 +102,7 @@ public class AWSSchemaRegistryClient {
                 glueClientBuilder.endpointOverride(new URI(glueSchemaRegistryConfiguration.getEndPoint()));
             } catch (URISyntaxException e) {
                 String message = String.format("Malformed uri, please pass the valid uri for creating the client",
-                                               glueSchemaRegistryConfiguration.getEndPoint());
+                        glueSchemaRegistryConfiguration.getEndPoint());
                 throw new AWSSchemaRegistryException(message, e);
             }
         }
@@ -112,7 +112,7 @@ public class AWSSchemaRegistryClient {
     /**
      * Create Amazon Schema Registry Client.
      *
-     * @param credentialsProvider           credentials provider
+     * @param credentialsProvider             credentials provider
      * @param glueSchemaRegistryConfiguration schema registry configuration elements
      * @throws AWSSchemaRegistryException on any error while building the client
      */
@@ -127,10 +127,11 @@ public class AWSSchemaRegistryClient {
 
     /**
      * Get Schema Version ID by passing the schema definition.
+     *
      * @param schemaDefinition Schema Definition
      * @param schemaName       Schema Name
      * @param dataFormat       Data Format
-     * @return                 Schema Version ID
+     * @return Schema Version ID
      * @throws AWSSchemaRegistryException on any error while fetching the schema version ID
      */
     public UUID getSchemaVersionIdByDefinition(@NonNull String schemaDefinition, @NonNull String schemaName,
@@ -153,9 +154,9 @@ public class AWSSchemaRegistryClient {
      * Get the schema definition by passing the schema id.
      *
      * @param schemaVersionId schema version id
-     * @return                schema definition returns the schema definition corresponding to the
-     *                        schema id passed and null in case service is not able to found the
-     *                        schema definition corresponding to schema id.
+     * @return schema definition returns the schema definition corresponding to the
+     * schema id passed and null in case service is not able to found the
+     * schema definition corresponding to schema id.
      * @throws AWSSchemaRegistryException on any errors during schema retrieval from service
      */
     public GetSchemaVersionResponse getSchemaVersionResponse(@NonNull String schemaVersionId)
@@ -201,7 +202,7 @@ public class AWSSchemaRegistryClient {
      *
      * @param schemaDefinition Schema Definition
      * @param schemaName       Schema Name
-     * @return                 GetSchemaByDefinitionRequest object
+     * @return GetSchemaByDefinitionRequest object
      */
     public GetSchemaByDefinitionRequest buildGetSchemaByDefinitionRequest(String schemaDefinition, String schemaName) {
         return buildGetSchemaByDefinitionRequest(schemaDefinition, schemaName, glueSchemaRegistryConfiguration.getRegistryName());
@@ -213,7 +214,7 @@ public class AWSSchemaRegistryClient {
      * @param schemaDefinition Schema Definition
      * @param schemaName       Schema Name
      * @param registryName     Registry name
-     * @return                 GetSchemaByDefinitionRequest object
+     * @return GetSchemaByDefinitionRequest object
      */
     public GetSchemaByDefinitionRequest buildGetSchemaByDefinitionRequest(String schemaDefinition, String schemaName,
                                                                           String registryName) {
@@ -225,11 +226,12 @@ public class AWSSchemaRegistryClient {
 
     /**
      * Create a schema using the Glue client and return the response object
-     * @param schemaName Schema Name
-     * @param dataFormat Data Format
+     *
+     * @param schemaName       Schema Name
+     * @param dataFormat       Data Format
      * @param schemaDefinition Schema Definition
-     * @param metadata schema version metadata
-     * @return           CreateSchemaResponse object
+     * @param metadata         schema version metadata
+     * @return CreateSchemaResponse object
      * @throws AWSSchemaRegistryException on any error during the schema creation
      */
     public UUID createSchema(String schemaName,
@@ -239,18 +241,18 @@ public class AWSSchemaRegistryClient {
         UUID schemaVersionId = null;
         try {
             log.info("Auto Creating schema with schemaName: {} and schemaDefinition : {}", schemaName,
-                      schemaDefinition);
+                    schemaDefinition);
             CreateSchemaResponse createSchemaResponse =
                     client.createSchema(getCreateSchemaRequestObject(schemaName, dataFormat, schemaDefinition));
             schemaVersionId = UUID.fromString(createSchemaResponse.schemaVersionId());
         } catch (AlreadyExistsException e) {
             log.warn("Schema is already created, this could be caused by multiple producers racing to "
-                     + "auto-create schema.");
+                    + "auto-create schema.");
             schemaVersionId = registerSchemaVersion(schemaDefinition, schemaName, dataFormat, metadata);
         } catch (Exception e) {
             String errorMessage = String.format(
                     "Create schema :: Call failed when creating the schema with the schema registry for"
-                    + " schema name = %s", schemaName);
+                            + " schema name = %s", schemaName);
             throw new AWSSchemaRegistryException(errorMessage, e);
         }
 
@@ -261,11 +263,12 @@ public class AWSSchemaRegistryClient {
 
     /**
      * Register the schema and return schema version Id once it is available.
+     *
      * @param schemaDefinition Schema Definition
      * @param schemaName       Schema Name
      * @param dataFormat       Data Format
      * @param metadata         Metadata Map
-     * @return                 Unique schema version ID.
+     * @return Unique schema version ID.
      * @throws AWSSchemaRegistryException on any error during the registration and fetching of schema version
      */
     public UUID registerSchemaVersion(String schemaDefinition, String schemaName, String dataFormat, Map<String, String> metadata) {
@@ -278,10 +281,11 @@ public class AWSSchemaRegistryClient {
 
     /**
      * Register the schema and return get schema version response once it is available.
+     *
      * @param schemaDefinition Schema Definition
      * @param schemaName       Schema Name
      * @param dataFormat       Data Format
-     * @return                 GetSchemaVersionResponse object.
+     * @return GetSchemaVersionResponse object.
      * @throws AWSSchemaRegistryException on any error during the registration and fetching of schema version
      */
     public GetSchemaVersionResponse registerSchemaVersion(String schemaDefinition, String schemaName, String dataFormat) throws AWSSchemaRegistryException {
@@ -293,8 +297,8 @@ public class AWSSchemaRegistryClient {
                     client.registerSchemaVersion(getRegisterSchemaVersionRequest(schemaDefinition, schemaName));
 
             log.info("Registered the schema version with schema version id = {} and with version number = {} and "
-                     + "status {}", registerSchemaVersionResponse.schemaVersionId(),
-                     registerSchemaVersionResponse.versionNumber(), registerSchemaVersionResponse.statusAsString());
+                            + "status {}", registerSchemaVersionResponse.schemaVersionId(),
+                    registerSchemaVersionResponse.versionNumber(), registerSchemaVersionResponse.statusAsString());
 
             if (AWSSchemaRegistryConstants.SchemaVersionStatus.AVAILABLE.toString()
                     .equals(registerSchemaVersionResponse.statusAsString())) {
@@ -381,9 +385,9 @@ public class AWSSchemaRegistryClient {
                 } else if (!AWSSchemaRegistryConstants.SchemaVersionStatus.PENDING.toString()
                         .equals(response.statusAsString())) {
                     throw new AWSSchemaRegistryException(String.format("Schema evolution check failed. "
-                                                                       + "schemaVersionId %s is in %s status.",
-                                                                       getSchemaVersionRequest.schemaVersionId(),
-                                                                       response.statusAsString()));
+                                    + "schemaVersionId %s is in %s status.",
+                            getSchemaVersionRequest.schemaVersionId(),
+                            response.statusAsString()));
                 }
 
             } while (retries++ < MAX_ATTEMPTS - 1);
@@ -391,13 +395,13 @@ public class AWSSchemaRegistryClient {
             if (retries >= MAX_ATTEMPTS && !AWSSchemaRegistryConstants.SchemaVersionStatus.AVAILABLE.toString()
                     .equals(response.statusAsString())) {
                 throw new AWSSchemaRegistryException(String.format("Retries exhausted for schema evolution check for "
-                                                                   + "schemaVersionId = %s",
-                                                                   getSchemaVersionRequest.schemaVersionId()));
+                                + "schemaVersionId = %s",
+                        getSchemaVersionRequest.schemaVersionId()));
             }
         } catch (Exception ex) {
             String message =
                     String.format("Exception occurred, while performing schema evolution check for schemaVersionId = "
-                                  + "%s", getSchemaVersionRequest.schemaVersionId());
+                            + "%s", getSchemaVersionRequest.schemaVersionId());
             throw new AWSSchemaRegistryException(message, ex);
         }
         return response;
@@ -405,8 +409,9 @@ public class AWSSchemaRegistryClient {
 
     /**
      * Put metadata to schema version asynchronously
+     *
      * @param schemaVersionId Schema Version Id
-     * @param metadata Metadata Map
+     * @param metadata        Metadata Map
      */
     public void putSchemaVersionMetadata(UUID schemaVersionId, Map<String, String> metadata) {
         metadata.entrySet()
@@ -423,9 +428,10 @@ public class AWSSchemaRegistryClient {
 
     /**
      * Put metadata to schema version and return the response object
-     * @param schemaVersionId Schema Version Id
+     *
+     * @param schemaVersionId      Schema Version Id
      * @param metadataKeyValuePair Metadata Key Value Pair
-     * @return           PutSchemaVersionMetadataResponse object
+     * @return PutSchemaVersionMetadataResponse object
      * @throws AWSSchemaRegistryException on any error during putting metadata
      */
     public PutSchemaVersionMetadataResponse putSchemaVersionMetadata(UUID schemaVersionId, MetadataKeyValuePair metadataKeyValuePair)
@@ -488,8 +494,9 @@ public class AWSSchemaRegistryClient {
 
     /**
      * Query Schema Tags Response for a given schema name and definition
-     * @param schemaDefinition  Schema Definition
-     * @param schemaName        Schema Name
+     *
+     * @param schemaDefinition Schema Definition
+     * @param schemaName       Schema Name
      * @return a GetTagsResponse with tags
      */
     public GetTagsResponse querySchemaTags(String schemaDefinition, String schemaName) {
@@ -526,38 +533,38 @@ public class AWSSchemaRegistryClient {
 
             GlueRequest request = (GlueRequest) context.request();
             AwsRequestOverrideConfiguration overrideConfiguration =
-                request.overrideConfiguration().map(config ->
-                    config
-                        .toBuilder()
-                        .addApiName(getApiName())
-                        .build())
-                    .orElse((AwsRequestOverrideConfiguration.builder()
-                        .addApiName(getApiName())
-                        .build()));
+                    request.overrideConfiguration().map(config ->
+                                    config
+                                            .toBuilder()
+                                            .addApiName(getApiName())
+                                            .build())
+                            .orElse((AwsRequestOverrideConfiguration.builder()
+                                    .addApiName(getApiName())
+                                    .build()));
 
             return request.toBuilder().overrideConfiguration(overrideConfiguration).build();
         }
 
         private ApiName getApiName() {
             return ApiName.builder()
-                .version(com.amazonaws.services.schemaregistry.common.MavenPackaging.VERSION)
-                .name(buildUserAgentSuffix())
-                .build();
+                    .version(com.amazonaws.services.schemaregistry.common.MavenPackaging.VERSION)
+                    .name(buildUserAgentSuffix())
+                    .build();
         }
 
         private String buildUserAgentSuffix() {
             Map<String, String> userAgentSuffixItems = ImmutableMap.of(
-                "autoreg", glueSchemaRegistryConfiguration.isSchemaAutoRegistrationEnabled() ? ONE : ZERO,
-                "compress", glueSchemaRegistryConfiguration.getCompressionType().equals(
-                    AWSSchemaRegistryConstants.COMPRESSION.ZLIB) ? ONE : ZERO,
-                "secdeser", glueSchemaRegistryConfiguration.getSecondaryDeserializer() != null ? ONE : ZERO,
-                "app", glueSchemaRegistryConfiguration.getUserAgentApp()
+                    "autoreg", glueSchemaRegistryConfiguration.isSchemaAutoRegistrationEnabled() ? ONE : ZERO,
+                    "compress", glueSchemaRegistryConfiguration.getCompressionType().equals(
+                            AWSSchemaRegistryConstants.COMPRESSION.ZLIB) ? ONE : ZERO,
+                    "secdeser", glueSchemaRegistryConfiguration.getSecondaryDeserializer() != null ? ONE : ZERO,
+                    "app", glueSchemaRegistryConfiguration.getUserAgentApp()
             );
 
             StringJoiner userAgentSuffix = new StringJoiner(":");
 
             userAgentSuffixItems
-                .forEach((key, value) -> userAgentSuffix.add(key + "/" + value));
+                    .forEach((key, value) -> userAgentSuffix.add(key + "/" + value));
 
             return userAgentSuffix.toString();
         }

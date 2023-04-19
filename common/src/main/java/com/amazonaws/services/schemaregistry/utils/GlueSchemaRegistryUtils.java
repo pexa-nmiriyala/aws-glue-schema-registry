@@ -62,7 +62,7 @@ public final class GlueSchemaRegistryUtils {
 
     public AWSSchemaNamingStrategy configureSchemaNamingStrategy(Map<String, ?> configs) {
         return isSchemaGenerationClassPresent(configs) ?
-               useCustomerProvidedStrategy(String.valueOf(configs.get(AWSSchemaRegistryConstants.SCHEMA_NAMING_GENERATION_CLASS))) : useDefaultStrategy();
+                useCustomerProvidedStrategy(String.valueOf(configs.get(AWSSchemaRegistryConstants.SCHEMA_NAMING_GENERATION_CLASS))) : useDefaultStrategy();
     }
 
     /**
@@ -73,7 +73,7 @@ public final class GlueSchemaRegistryUtils {
      */
     public String getSchemaName(Map<String, ?> configs) {
         return checkIfPresentInMap(configs, AWSSchemaRegistryConstants.SCHEMA_NAME) ?
-               String.valueOf(configs.get(AWSSchemaRegistryConstants.SCHEMA_NAME)) : null;
+                String.valueOf(configs.get(AWSSchemaRegistryConstants.SCHEMA_NAME)) : null;
     }
 
     /**

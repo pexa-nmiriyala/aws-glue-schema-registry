@@ -15,9 +15,6 @@
 
 package com.amazonaws.services.schemaregistry.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Value;
-
 import java.util.Objects;
 
 /**

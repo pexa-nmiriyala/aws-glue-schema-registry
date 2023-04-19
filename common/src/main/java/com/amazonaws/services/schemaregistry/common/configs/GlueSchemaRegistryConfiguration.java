@@ -137,7 +137,7 @@ public class GlueSchemaRegistryConfiguration {
         if (!EnumUtils.isValidEnum(AWSSchemaRegistryConstants.COMPRESSION.class, compressionType.toUpperCase())) {
             String errorMessage =
                     String.format("Invalid Compression type : %s, Accepted values are : %s", compressionType,
-                                  AWSSchemaRegistryConstants.COMPRESSION.values());
+                            AWSSchemaRegistryConstants.COMPRESSION.values());
             throw new AWSSchemaRegistryException(errorMessage);
         }
         return true;
@@ -158,10 +158,10 @@ public class GlueSchemaRegistryConfiguration {
                             .toUpperCase());
 
             if (this.compatibilitySetting == null
-                || this.compatibilitySetting == Compatibility.UNKNOWN_TO_SDK_VERSION) {
+                    || this.compatibilitySetting == Compatibility.UNKNOWN_TO_SDK_VERSION) {
                 String errorMessage = String.format("Invalid compatibility setting : %s, Accepted values are : %s",
-                                                    configs.get(AWSSchemaRegistryConstants.COMPATIBILITY_SETTING),
-                                                    Compatibility.knownValues());
+                        configs.get(AWSSchemaRegistryConstants.COMPATIBILITY_SETTING),
+                        Compatibility.knownValues());
                 throw new AWSSchemaRegistryException(errorMessage);
             }
         } else {
@@ -241,7 +241,7 @@ public class GlueSchemaRegistryConfiguration {
                             .toString());
         } else {
             log.info("schemaAutoRegistrationEnabled is not defined in the properties. Using the default value {}",
-                     schemaAutoRegistrationEnabled);
+                    schemaAutoRegistrationEnabled);
         }
     }
 
@@ -310,9 +310,9 @@ public class GlueSchemaRegistryConfiguration {
 
     private Map<String, ?> getMapFromPropertiesFile(Properties properties) {
         return new HashMap<>(properties.entrySet()
-                                     .stream()
-                                     .collect(Collectors.toMap(e -> e.getKey()
-                                             .toString(), e -> e.getValue())));
+                .stream()
+                .collect(Collectors.toMap(e -> e.getKey()
+                        .toString(), e -> e.getValue())));
     }
 
     private String buildDescriptionFromProperties() throws AWSSchemaRegistryException {
